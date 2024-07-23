@@ -13,7 +13,7 @@
 
   <script>
     function fetchStatus() {
-      fetch('http://192.168.0.105/status') // Ensure this is HTTP
+      fetch('https://192.168.0.105/status') // Ensure this is HTTP
         .then(response => response.json())
         .then(data => {
           document.getElementById('status').innerText = `Temperature: ${data.temperature}°C, Humidity: ${data.humidity}%`;
@@ -22,7 +22,7 @@
     }
 
     function sendCommand(command) {
-      fetch(`http://192.168.0.105/control?command=${command}`) // Ensure this is HTTP
+      fetch(`https://192.168.0.105/control?command=${command}`) // Ensure this is HTTP
         .then(response => response.text())
         .then(text => {
           console.log(text);
