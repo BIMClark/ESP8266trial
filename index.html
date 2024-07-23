@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP Dashboard</title>
+  <style>
+    .widget { margin: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+    .status { font-size: 20px; }
+    .button { margin: 5px; padding: 10px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>BEN SE POMP</h1>
+  <div class="widget" id="statusWidget">
+    <h2>Status</h2>
+    <div class="status" id="status">Loading...</div>
+  </div>
+  <div class="widget">
+    <button class="button" onclick="sendCommand('on')">Turn On</button>
+    <button class="button" onclick="sendCommand('off')">Turn Off</button>
+  </div>
+
+  <script>
+    function fetchStatus() {
+      fetch('http://192.168.0.105/status')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('status').innerText = `Temperature: ${data.temperature}°C, Humidity: ${data.humidity}%`;
+        });
+    }
+
+    function sendCommand(command) {
+      fetch(`http://192.168.0.105/control?command=${command}`)
+        .then(response => response.text())
+        .then(data => console.log(data));
+    }
+
+    // Update status every 5 seconds
+    setInterval(fetchStatus, 5000);
+    fetchStatus(); // Initial fetch
+  </script>
+</body>
+</html>
