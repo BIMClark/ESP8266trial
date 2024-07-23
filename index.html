@@ -9,7 +9,7 @@
   </style>
 </head>
 <body>
-  <h1>BEN SE POMP</h1>
+  <h1>ESP8266 Dashboard</h1>
   <div class="widget" id="statusWidget">
     <h2>Status</h2>
     <div class="status" id="status">Loading...</div>
@@ -24,14 +24,19 @@
       fetch('http://192.168.0.105/status')
         .then(response => response.json())
         .then(data => {
-          document.getElementById('status').innerText = `Temperature: ${data.temperature}°C, Humidity: ${data.humidity}%`;
+          document.getElementById('status').innerText = data.message;
+        })
+        .catch(error => {
+          document.getElementById('status').innerText = 'Error fetching status';
+          console.error('There has been a problem with your fetch operation:', error);
         });
     }
 
     function sendCommand(command) {
       fetch(`http://192.168.0.105/control?command=${command}`)
         .then(response => response.text())
-        .then(data => console.log(data));
+        .then(data => console.log(data))
+        .catch(error => console.error('There has been a problem with your fetch operation:', error));
     }
 
     // Update status every 5 seconds
