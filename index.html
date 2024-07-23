@@ -2,25 +2,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test ESP8266</title>
+  <title>ESP8266 Control</title>
 </head>
 <body>
-  <h1>ESP8266 Test Page</h1>
-  <button onclick="fetchStatus()">Fetch Status</button>
-  <p id="status">Status will appear here.</p>
+  <h1>ESP8266 Control</h1>
+  <button onclick="fetchStatus()">Get Status</button>
+  <div id="status"></div>
+  <button onclick="sendCommand('on')">Turn On LED</button>
+  <button onclick="sendCommand('off')">Turn Off LED</button>
 
   <script>
     function fetchStatus() {
-      fetch('http://192.168.0.105/status')
+      fetch('http://192.168.0.105/status') // Ensure this is HTTP
         .then(response => response.json())
         .then(data => {
           document.getElementById('status').innerText = `Temperature: ${data.temperature}°C, Humidity: ${data.humidity}%`;
         })
-        .catch(error => {
-          console.error('Error fetching status:', error);
-          document.getElementById('status').innerText = 'Error fetching status.';
-        });
+        .catch(error => console.error('Error:', error));
+    }
+
+    function sendCommand(command) {
+      fetch(`http://192.168.0.105/control?command=${command}`) // Ensure this is HTTP
+        .then(response => response.text())
+        .then(text => {
+          console.log(text);
+        })
+        .catch(error => console.error('Error:', error));
     }
   </script>
 </body>
 </html>
+
